@@ -60,3 +60,10 @@ export interface ResumoDashboard {
   leadsPorStatus: { status: StatusLead; quantidade: number }[];
   funilResumo: { estagio: EstagioFunil; quantidade: number; valor: number }[];
 }
+
+// Cor de cada estágio do funil (as mesmas variáveis CSS definidas em styles.css).
+export const COR_ESTAGIO: Record<EstagioFunil, string> = {
+  Prospeccao: 'var(--st-prospeccao)', Qualificacao: 'var(--st-qualificacao)',
+  Proposta: 'var(--st-proposta)', Negociacao: 'var(--st-negociacao)',
+  Ganha: 'var(--st-ganha)', Perdida: 'var(--st-perdida)'
+};
