@@ -9,8 +9,8 @@ import { COR_ESTAGIO, ColunaFunil, ESTAGIOS, EstagioFunil, OportunidadeItem, ROT
   imports: [CurrencyPipe, DatePipe, RouterLink],
   styles: [`
     .quadro { display: flex; gap: .85rem; overflow-x: auto; padding-bottom: .75rem; align-items: flex-start; }
-    .coluna { flex: 1 0 250px; background: #e4e9eb; border-radius: var(--raio-g); padding: .75rem; min-height: 180px; }
-    .coluna.alvo { outline: 2px dashed var(--cor); outline-offset: -2px; background: color-mix(in srgb, var(--cor) 14%, white); }
+    .coluna { flex: 1 0 250px; background: var(--coluna); border-radius: var(--raio-g); padding: .75rem; min-height: 180px; }
+    .coluna.alvo { outline: 2px dashed var(--cor); outline-offset: -2px; background: color-mix(in srgb, var(--cor) 16%, var(--surface)); }
     .topo { display: flex; align-items: center; gap: .5rem; margin-bottom: .15rem; }
     .topo .ponto { width: 10px; height: 10px; border-radius: 50%; background: var(--cor); flex: none; }
     .topo h2 { font-size: 1rem; margin: 0; flex: 1; }

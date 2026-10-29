@@ -11,7 +11,7 @@ import { COR_ESTAGIO, ResumoDashboard, ROTULO } from '../../core/models';
   styles: [`
     /* Destaque da página: o funil em aberto, numa barra segmentada pelas cores dos estágios */
     .total { font-family: var(--fonte-titulo); font-weight: 600; font-size: 2.6rem; letter-spacing: -.03em; line-height: 1; }
-    .barra-funil { display: flex; gap: 3px; height: 22px; margin: 1.1rem 0 1.25rem; border-radius: 11px; overflow: hidden; background: repeating-linear-gradient(45deg, var(--canvas), var(--canvas) 6px, #e4e9eb 6px, #e4e9eb 12px); }
+    .barra-funil { display: flex; gap: 3px; height: 22px; margin: 1.1rem 0 1.25rem; border-radius: 11px; overflow: hidden; background: repeating-linear-gradient(45deg, var(--canvas), var(--canvas) 6px, var(--coluna) 6px, var(--coluna) 12px); }
     .barra-funil span { min-width: 8px; }
     .legenda { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: .9rem 1.25rem; }
     .legenda .item { border-left: 3px solid var(--cor); padding-left: .7rem; }

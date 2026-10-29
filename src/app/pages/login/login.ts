@@ -10,7 +10,7 @@ import { ApiService } from '../../core/api.service';
   styles: [`
     .tela { min-height: 100vh; display: grid; grid-template-columns: minmax(320px, 5fr) 6fr; }
     .lado {
-      background: var(--brand-ink); color: #e8f3f3; padding: 3rem; display: flex; flex-direction: column; justify-content: space-between;
+      background: var(--brand-deep); color: #e8f3f3; padding: 3rem; display: flex; flex-direction: column; justify-content: space-between;
     }
     .lado .nome { font-family: var(--fonte-titulo); font-weight: 700; font-size: 1.4rem; display: flex; align-items: center; gap: .6rem; }
     .lado .nome svg { width: 32px; height: 32px; }
@@ -28,7 +28,7 @@ import { ApiService } from '../../core/api.service';
     .form-lado { display: grid; place-items: center; padding: 2rem 1.25rem; }
     .caixa { width: 100%; max-width: 380px; }
     .caixa h1 { margin-bottom: .4rem; }
-    .link { background: none; border: 0; color: var(--brand); cursor: pointer; font: inherit; font-weight: 600; padding: 0; }
+    .link { background: none; border: 0; color: var(--link); cursor: pointer; font: inherit; font-weight: 600; padding: 0; }
     .link:hover { text-decoration: underline; }
     .dica { font-size: .82rem; color: var(--ink-3); }
 

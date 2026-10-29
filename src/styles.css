@@ -18,6 +18,15 @@
   --brand: #0f5c63;
   --brand-ink: #0a4349;
   --brand-soft: #dcedee;
+  --brand-hover: #0a4349;   /* fundo do botão ao passar o mouse */
+  --brand-deep: #0a4349;    /* painel escuro da tela de login */
+  --link: #0f5c63;          /* cor de links */
+  --surface-2: #f8fafa;     /* cabeçalho de tabela e linha em destaque */
+  --coluna: #e4e9eb;        /* fundo das colunas do funil */
+  --texto-ok: #1b5e3f;
+  --texto-erro: #7e2a1b;
+  --logo-2: #2f8190;        /* barras do logo (precisam de contraste nos dois temas) */
+  --logo-3: #0f5c63;
 
   --ok: #2e8f62;
   --ok-soft: #dff1e7;
@@ -42,6 +51,43 @@
   --lateral: 248px;
 }
 
+/* =====================================================================
+   Tema escuro: só redefine as variáveis; o resto do CSS não muda.
+   Ativado por data-tema="escuro" no <html> (veja core/tema.service.ts).
+   ===================================================================== */
+:root[data-tema='escuro'] {
+  color-scheme: dark;
+  --canvas: #0e161b;
+  --surface: #162129;
+  --surface-2: #1b2931;
+  --coluna: #1d2b33;
+  --ink: #e5edf0;
+  --ink-2: #a7b8bf;
+  --ink-3: #7a8d96;
+  --line: #263741;
+  --line-strong: #38505b;
+
+  --brand: #2b8a90;
+  --brand-ink: #8ad3d8;
+  --brand-soft: #17353a;
+  --brand-hover: #35a0a7;
+  --brand-deep: #0a2a2e;
+  --link: #7cc9ce;
+
+  --ok: #4cc084;
+  --ok-soft: #173a2a;
+  --warn: #e0a847;
+  --warn-soft: #3a2d12;
+  --danger: #e0705a;
+  --danger-soft: #3b1d17;
+  --texto-ok: #8fe0b5;
+  --texto-erro: #f1a595;
+
+  --st-prospeccao: #9db3c4;
+  --logo-2: #4aa6a8;
+  --logo-3: #7cc9ce;
+}
+
 * { box-sizing: border-box; }
 html, body { margin: 0; }
 body {
@@ -56,9 +102,9 @@ body {
 h1, h2, h3 { font-family: var(--fonte-titulo); font-weight: 600; letter-spacing: -0.015em; line-height: 1.15; margin: 0; }
 h1 { font-size: 1.85rem; }
 h2 { font-size: 1.15rem; margin-bottom: .75rem; }
-a { color: var(--brand); text-decoration-color: color-mix(in srgb, var(--brand) 35%, transparent); text-underline-offset: 3px; }
+a { color: var(--link); text-decoration-color: color-mix(in srgb, var(--link) 35%, transparent); text-underline-offset: 3px; }
 a:hover { text-decoration-color: currentColor; }
-:focus-visible { outline: 3px solid color-mix(in srgb, var(--brand) 45%, white); outline-offset: 2px; border-radius: 4px; }
+:focus-visible { outline: 3px solid color-mix(in srgb, var(--brand) 55%, var(--surface)); outline-offset: 2px; border-radius: 4px; }
 .num { font-variant-numeric: tabular-nums; }
 
 /* ===== Estrutura: menu lateral claro + conteúdo ===== */
@@ -78,19 +124,28 @@ a:hover { text-decoration-color: currentColor; }
 .sidebar nav a:hover { background: var(--canvas); color: var(--ink); }
 .sidebar nav a.ativo { background: var(--brand-soft); color: var(--brand-ink); font-weight: 600; }
 
-.usuario { display: flex; align-items: center; gap: .65rem; padding: .75rem .5rem 0; border-top: 1px solid var(--line); }
+.usuario { display: flex; align-items: center; gap: .5rem; padding: .75rem .25rem 0; border-top: 1px solid var(--line); }
 .avatar {
-  width: 36px; height: 36px; border-radius: 50%; flex: none; display: grid; place-items: center;
+  width: 34px; height: 34px; border-radius: 50%; flex: none; display: grid; place-items: center;
   background: var(--brand); color: #fff; font-family: var(--fonte-titulo); font-weight: 600;
 }
 .usuario .quem { min-width: 0; flex: 1; line-height: 1.25; }
 .usuario .nome { font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .usuario .perfil { font-size: .8rem; color: var(--ink-3); }
-.btn-sair { background: none; border: 0; color: var(--ink-3); cursor: pointer; padding: .4rem; border-radius: 8px; display: grid; }
+.btn-sair { background: none; border: 0; color: var(--ink-3); cursor: pointer; padding: .3rem; border-radius: 8px; display: grid; }
 .btn-sair:hover { background: var(--canvas); color: var(--danger); }
-.btn-sair svg { width: 19px; height: 19px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+.btn-tema { background: none; border: 0; color: var(--ink-3); cursor: pointer; padding: .3rem; border-radius: 8px; display: grid; }
+.btn-tema:hover { background: var(--canvas); color: var(--ink); }
+.btn-instalar {
+  display: flex; align-items: center; gap: .6rem; width: 100%; margin: 0 0 .75rem; padding: .6rem .75rem;
+  background: var(--brand-soft); color: var(--brand-ink); border: 0; border-radius: var(--raio); font: 600 .9rem var(--fonte-texto); cursor: pointer;
+}
+.btn-instalar:hover { filter: brightness(1.06); }
+.btn-instalar svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.btn-sair svg, .btn-tema svg { width: 19px; height: 19px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
 
 .conteudo { margin-left: var(--lateral); padding: 2rem 2.25rem 3rem; min-height: 100vh; }
+/* Em telas largas o conteúdo cresce até 1600px e fica centralizado na área ao lado do menu. */
 .pagina { max-width: 1600px; margin: 0 auto; }
 .topbar { display: none; }
 .fundo-menu { display: none; }
@@ -127,11 +182,11 @@ a:hover { text-decoration-color: currentColor; }
   padding: .55rem 1rem; border-radius: var(--raio); font: 600 .9rem var(--fonte-texto); cursor: pointer;
   transition: background .15s, border-color .15s;
 }
-.btn:hover { background: var(--brand-ink); border-color: var(--brand-ink); }
+.btn:hover { background: var(--brand-hover); border-color: var(--brand-hover); }
 .btn:disabled { opacity: .55; cursor: not-allowed; }
 .btn-sec { background: var(--surface); color: var(--ink); border-color: var(--line-strong); }
 .btn-sec:hover { background: var(--canvas); border-color: var(--ink-3); }
-.btn-perigo { background: var(--surface); color: var(--danger); border-color: color-mix(in srgb, var(--danger) 40%, white); }
+.btn-perigo { background: var(--surface); color: var(--danger); border-color: color-mix(in srgb, var(--danger) 45%, var(--surface)); }
 .btn-perigo:hover { background: var(--danger-soft); border-color: var(--danger); }
 .btn-peq { padding: .3rem .65rem; font-size: .8rem; border-radius: 8px; }
 
@@ -155,22 +210,22 @@ textarea { resize: vertical; min-height: 80px; }
 
 /* ===== Mensagens ===== */
 .msg-erro, .msg-ok { padding: .7rem .9rem; border-radius: var(--raio); margin-bottom: 1rem; border: 1px solid; }
-.msg-erro { background: var(--danger-soft); color: #7e2a1b; border-color: color-mix(in srgb, var(--danger) 30%, white); }
-.msg-ok { background: var(--ok-soft); color: #1b5e3f; border-color: color-mix(in srgb, var(--ok) 30%, white); }
+.msg-erro { background: var(--danger-soft); color: var(--texto-erro); border-color: color-mix(in srgb, var(--danger) 35%, var(--surface)); }
+.msg-ok { background: var(--ok-soft); color: var(--texto-ok); border-color: color-mix(in srgb, var(--ok) 35%, var(--surface)); }
 .vazio { color: var(--ink-3); padding: 1.75rem 1rem; text-align: center; }
 
 /* ===== Etiquetas ===== */
 .selo { display: inline-block; padding: .12rem .6rem; border-radius: 999px; font-size: .78rem; font-weight: 600; background: var(--canvas); color: var(--ink-2); white-space: nowrap; }
-.selo.verde { background: var(--ok-soft); color: #1b5e3f; }
-.selo.vermelho { background: var(--danger-soft); color: #7e2a1b; }
+.selo.verde { background: var(--ok-soft); color: var(--texto-ok); }
+.selo.vermelho { background: var(--danger-soft); color: var(--texto-erro); }
 .selo.amarelo { background: var(--warn-soft); color: var(--warn); }
 
 /* ===== Tabelas (viram cartões empilhados no celular) ===== */
 .tabela-wrap { overflow-x: auto; }
 table { width: 100%; border-collapse: collapse; }
 th, td { text-align: left; padding: .8rem 1rem; border-bottom: 1px solid var(--line); vertical-align: middle; }
-th { font-size: .82rem; font-weight: 500; color: var(--ink-3); background: #f8fafa; white-space: nowrap; }
-tbody tr:hover { background: #f8fafa; }
+th { font-size: .82rem; font-weight: 500; color: var(--ink-3); background: var(--surface-2); white-space: nowrap; }
+tbody tr:hover { background: var(--surface-2); }
 tr:last-child td { border-bottom: 0; }
 td.acoes-cel { white-space: nowrap; text-align: right; }
 td[data-rotulo="Telefone"] { white-space: nowrap; }
