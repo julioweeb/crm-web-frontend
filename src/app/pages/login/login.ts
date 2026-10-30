@@ -59,40 +59,28 @@ import { ApiService } from '../../core/api.service';
 
       <section class="form-lado">
         <form class="caixa" (ngSubmit)="enviar()" #f="ngForm">
-          <h1>{{ modoCadastro() ? 'Criar conta' : 'Entrar' }}</h1>
+          <h1>Entrar</h1>
           <p class="subtitulo" style="margin-bottom:1.5rem">
-            {{ modoCadastro() ? 'Preencha seus dados para começar.' : 'Use seu e-mail e senha para acessar.' }}
+            Use seu e-mail e senha para acessar.
           </p>
 
           @if (erro()) { <div class="msg-erro" role="alert">{{ erro() }}</div> }
 
-          @if (modoCadastro()) {
-            <div class="campo">
-              <label for="nome">Nome</label>
-              <input id="nome" name="nome" [(ngModel)]="nome" required maxlength="120" autocomplete="name">
-            </div>
-          }
           <div class="campo">
             <label for="email">E-mail</label>
             <input id="email" name="email" type="email" [(ngModel)]="email" required autocomplete="username">
           </div>
           <div class="campo">
             <label for="senha">Senha</label>
-            <input id="senha" name="senha" type="password" [(ngModel)]="senha" required
-                   [minlength]="modoCadastro() ? 8 : 1"
-                   [autocomplete]="modoCadastro() ? 'new-password' : 'current-password'">
-            @if (modoCadastro()) {
-              <span class="dica">Mínimo de 8 caracteres, com letras e números.</span>
-            }
+            <input id="senha" name="senha" type="password" [(ngModel)]="senha" required autocomplete="current-password">
           </div>
 
           <button class="btn" style="width:100%; padding:.7rem" type="submit" [disabled]="carregando() || f.invalid">
-            {{ carregando() ? 'Aguarde...' : (modoCadastro() ? 'Criar conta' : 'Entrar') }}
+            {{ carregando() ? 'Aguarde...' : 'Entrar' }}
           </button>
 
-          <p style="text-align:center; margin-top:1.25rem">
-            {{ modoCadastro() ? 'Já tem conta?' : 'Ainda não tem conta?' }}
-            <button type="button" class="link" (click)="alternar()">{{ modoCadastro() ? 'Entrar' : 'Criar conta' }}</button>
+          <p class="dica" style="text-align:center; margin-top:1.25rem">
+            O acesso é disponibilizado pelo administrador do sistema.
           </p>
         </form>
       </section>
@@ -103,25 +91,20 @@ export class Login {
   private auth = inject(AuthService);
   private router = inject(Router);
 
-  nome = '';
   email = '';
   senha = '';
-  modoCadastro = signal(false);
   carregando = signal(false);
   erro = signal('');
-
-  alternar() { this.modoCadastro.update(v => !v); this.erro.set(''); }
 
   enviar() {
     this.erro.set('');
     this.carregando.set(true);
-    const req = this.modoCadastro()
-      ? this.auth.registrar(this.nome, this.email, this.senha)
-      : this.auth.login(this.email, this.senha);
-
-    req.subscribe({
+    this.auth.login(this.email, this.senha).subscribe({
       next: () => this.router.navigate(['/dashboard']),
-      error: e => { this.erro.set(ApiService.mensagemErro(e)); this.carregando.set(false); }
+      error: e => {
+        this.erro.set(ApiService.mensagemErro(e));
+        this.carregando.set(false);
+      }
     });
   }
 }

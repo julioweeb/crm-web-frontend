@@ -30,10 +30,6 @@ export class AuthService {
       .pipe(tap(r => this.guardar(r)));
   }
 
-  registrar(nome: string, email: string, senha: string) {
-    return this.http.post<AuthResposta>(`${API_URL}/auth/registro`, { nome, email, senha })
-      .pipe(tap(r => this.guardar(r)));
-  }
 
   sair() {
     try {

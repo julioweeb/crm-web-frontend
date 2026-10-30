@@ -15,7 +15,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
 
   return next(requisicao).pipe(
     catchError((erro: HttpErrorResponse) => {
-      const ehLogin = req.url.includes('/auth/login') || req.url.includes('/auth/registro');
+      const ehLogin = req.url.includes('/auth/login');
       if (erro.status === 401 && !ehLogin) auth.sair();
       return throwError(() => erro);
     })
