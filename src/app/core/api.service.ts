@@ -2,7 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { API_URL } from './config';
 import {
-  Anotacao, Cliente, ColunaFunil, Contato, EstagioFunil, Interacao, Lead, Pagina,
+  Anotacao, Cliente, ColunaFunil, Contato, Empresa, EstagioFunil, Interacao, Lead, Pagina,
   ResumoDashboard, Tarefa, Usuario
 } from './models';
 
@@ -65,6 +65,11 @@ export class ApiService {
   concluirTarefa(id: number) { return this.http.patch<Tarefa>(`${API_URL}/tarefas/${id}/concluir`, {}); }
   excluirTarefa(id: number) { return this.http.delete<void>(`${API_URL}/tarefas/${id}`); }
 
+  // ===== Empresas (SuperAdmin) =====
+  empresas() { return this.http.get<Empresa[]>(API_URL + '/empresas'); }
+  criarEmpresa(e: { nome: string; adminNome: string; adminEmail: string; adminSenha: string }) {
+    return this.http.post<Empresa>(API_URL + '/empresas', e);
+  }
   // ===== Usuários (Admin) =====
   usuarios() { return this.http.get<Usuario[]>(`${API_URL}/usuarios`); }
   criarUsuario(u: { nome: string; email: string; senha: string; perfil: string; ativo: boolean }) {

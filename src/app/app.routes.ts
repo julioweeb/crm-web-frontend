@@ -16,8 +16,13 @@ export const routes: Routes = [
       { path: 'funil', loadComponent: () => import('./pages/funil/funil').then(m => m.Funil) },
       { path: 'tarefas', loadComponent: () => import('./pages/tarefas/tarefas').then(m => m.Tarefas) },
       {
+        path: 'empresas',
+        canActivate: [perfilGuard('SuperAdmin')],
+        loadComponent: () => import('./pages/empresas/empresas').then(m => m.Empresas)
+      },
+      {
         path: 'usuarios',
-        canActivate: [perfilGuard('Admin')],
+        canActivate: [perfilGuard('Admin', 'SuperAdmin')],
         loadComponent: () => import('./pages/usuarios/usuarios').then(m => m.Usuarios)
       }
     ]

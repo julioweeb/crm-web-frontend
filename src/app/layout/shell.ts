@@ -2,10 +2,10 @@ import { Component, computed, inject, signal } from '@angular/core';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { AuthService } from '../core/auth.service';
 import { InstalarService } from '../core/instalar.service';
-import { ROTULO } from '../core/models';
+import { Perfil, ROTULO } from '../core/models';
 import { TemaService } from '../core/tema.service';
 
-interface ItemMenu { rota: string; texto: string; icone: string; so?: 'Admin'; }
+interface ItemMenu { rota: string; texto: string; icone: string; so?: Perfil[]; }
 
 @Component({
   selector: 'app-shell',
@@ -93,9 +93,10 @@ export class Shell {
     { rota: '/leads', texto: 'Leads', icone: 'M22 12h-6l-2 3h-4l-2-3H2M5.5 5.1L2 12v6a2 2 0 002 2h16a2 2 0 002-2v-6l-3.5-6.9A2 2 0 0016.8 4H7.2a2 2 0 00-1.7 1.1z' },
     { rota: '/funil', texto: 'Funil de vendas', icone: 'M22 3H2l8 9.5V19l4 2v-8.5z' },
     { rota: '/tarefas', texto: 'Tarefas e agenda', icone: 'M8 2v4M16 2v4M3 10h18M5 4h14a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V6a2 2 0 012-2z' },
-    { rota: '/usuarios', texto: 'Usuários', icone: 'M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z', so: 'Admin' }
+    { rota: '/usuarios', texto: 'Usuários', icone: 'M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z', so: ['Admin', 'SuperAdmin'] },
+    { rota: '/empresas', texto: 'Empresas', icone: 'M3 21h18M5 21V7l8-4 8 4v14M9 9h1m4 0h1m-6 4h1m4 0h1m-5 8v-4h4v4', so: ['SuperAdmin'] }
   ];
 
-  itens = computed(() => this.todos.filter(i => !i.so || this.auth.temPerfil(i.so)));
+  itens = computed(() => this.todos.filter(i => !i.so || this.auth.temPerfil(...i.so!)));
   inicial = computed(() => (this.auth.usuario()?.nome ?? '?').trim().charAt(0).toUpperCase());
 }

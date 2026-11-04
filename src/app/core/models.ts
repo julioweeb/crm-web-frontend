@@ -1,4 +1,4 @@
-export type Perfil = 'Vendedor' | 'Gerente' | 'Admin';
+export type Perfil = 'Vendedor' | 'Gerente' | 'Admin' | 'SuperAdmin';
 export type StatusLead = 'Novo' | 'Contatado' | 'Qualificado' | 'Desqualificado' | 'Convertido';
 export type EstagioFunil = 'Prospeccao' | 'Qualificacao' | 'Proposta' | 'Negociacao' | 'Ganha' | 'Perdida';
 export type TipoInteracao = 'Ligacao' | 'Email' | 'Reuniao' | 'Mensagem' | 'Outro';
@@ -21,10 +21,11 @@ export const ROTULO: Record<string, string> = {
   Ligacao: 'Ligação', Email: 'E-mail', Reuniao: 'Reunião', Mensagem: 'Mensagem',
   Outro: 'Outro', Tarefa: 'Tarefa',
   Pendente: 'Pendente', EmAndamento: 'Em andamento', Concluida: 'Concluída',
-  Vendedor: 'Vendedor', Gerente: 'Gerente', Admin: 'Administrador'
+  Vendedor: 'Vendedor', Gerente: 'Gerente', Admin: 'Administrador', SuperAdmin: 'SuperAdmin'
 };
 
 export interface Usuario { id: number; nome: string; email: string; perfil: Perfil; ativo: boolean; }
+export interface Empresa { id: number; nome: string; ativo: boolean; criadoEm: string; totalUsuarios: number; }
 export interface AuthResposta { token: string; expiraEm: string; usuario: Usuario; }
 export interface Pagina<T> { total: number; pagina: number; tamanho: number; itens: T[]; }
 

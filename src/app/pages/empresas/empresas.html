@@ -1,0 +1,55 @@
+<div class="cabecalho">
+  <div>
+    <h1>Empresas</h1>
+    <p class="subtitulo">Cadastre uma empresa e o primeiro Administrador; o vínculo é criado automaticamente.</p>
+  </div>
+</div>
+
+@if (erro()) { <div class="msg-erro" role="alert">{{ erro() }}</div> }
+@if (sucesso()) { <div class="msg-ok" role="status">{{ sucesso() }}</div> }
+
+<form class="cartao" style="margin-bottom:1rem" (ngSubmit)="salvar()" #f="ngForm">
+  <h2>Nova empresa</h2>
+  <div class="form-grade">
+    <div class="campo">
+      <label for="empresa-nome">Nome da empresa *</label>
+      <input id="empresa-nome" name="nome" [(ngModel)]="form.nome" required maxlength="160">
+    </div>
+    <div class="campo">
+      <label for="admin-nome">Nome do primeiro Admin *</label>
+      <input id="admin-nome" name="adminNome" [(ngModel)]="form.adminNome" required maxlength="120">
+    </div>
+    <div class="campo">
+      <label for="admin-email">E-mail de acesso *</label>
+      <input id="admin-email" name="adminEmail" type="email" [(ngModel)]="form.adminEmail" required maxlength="160" autocomplete="off">
+    </div>
+    <div class="campo">
+      <label for="admin-senha">Senha inicial *</label>
+      <input id="admin-senha" name="adminSenha" type="password" [(ngModel)]="form.adminSenha" required minlength="8" autocomplete="new-password">
+      <small>Use pelo menos 8 caracteres, com letras e números.</small>
+    </div>
+  </div>
+  <div class="acoes">
+    <button class="btn" type="submit" [disabled]="f.invalid || carregando()">
+      {{ carregando() ? 'Criando...' : 'Criar empresa e Admin' }}
+    </button>
+  </div>
+</form>
+
+<div class="cartao tabela-wrap" style="padding:0">
+  <table class="responsiva">
+    <thead><tr><th>Empresa</th><th>Situação</th><th>Usuários</th><th>Criada em</th></tr></thead>
+    <tbody>
+      @for (e of itens(); track e.id) {
+        <tr>
+          <td data-rotulo="Empresa"><strong>{{ e.nome }}</strong></td>
+          <td data-rotulo="Situação"><span class="selo" [class.verde]="e.ativo">{{ e.ativo ? 'Ativa' : 'Inativa' }}</span></td>
+          <td data-rotulo="Usuários">{{ e.totalUsuarios }}</td>
+          <td data-rotulo="Criada em">{{ e.criadoEm | date:'dd/MM/yyyy' }}</td>
+        </tr>
+      } @empty {
+        <tr><td colspan="4" style="text-align:center;padding:1.5rem">Nenhuma empresa cadastrada.</td></tr>
+      }
+    </tbody>
+  </table>
+</div>

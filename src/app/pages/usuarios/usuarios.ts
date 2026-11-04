@@ -1,4 +1,5 @@
 import { Component, inject, signal } from '@angular/core';
+import { AuthService } from '../../core/auth.service';
 import { FormsModule } from '@angular/forms';
 import { ApiService } from '../../core/api.service';
 import { PERFIS, ROTULO, Usuario } from '../../core/models';
@@ -28,11 +29,11 @@ interface FormUsuario { id?: number; nome: string; email: string; senha: string;
           <div class="campo"><label for="u-s">{{ u.id ? 'Nova senha (opcional)' : 'Senha *' }}</label>
             <input id="u-s" name="senha" type="password" [(ngModel)]="u.senha" [required]="!u.id" minlength="8" autocomplete="new-password"></div>
           <div class="campo"><label for="u-p">Perfil</label>
-            <select id="u-p" name="perfil" [(ngModel)]="u.perfil">
+            @if (u.perfil === 'SuperAdmin' || u.id === auth.usuario()?.id) { <input id="u-p" name="perfil" [value]="rotulo[u.perfil]" disabled> } @else { <select id="u-p" name="perfil" [(ngModel)]="u.perfil">
               @for (p of perfis; track p) { <option [value]="p">{{ rotulo[p] }}</option> }
-            </select></div>
+            </select> }</div>
           <div class="campo"><label for="u-a">Situação</label>
-            <select id="u-a" name="ativo" [(ngModel)]="u.ativo">
+            <select id="u-a" name="ativo" [(ngModel)]="u.ativo" [disabled]="u.id === auth.usuario()?.id">
               <option [ngValue]="true">Ativo</option><option [ngValue]="false">Inativo</option>
             </select></div>
         </div>
@@ -53,7 +54,7 @@ interface FormUsuario { id?: number; nome: string; email: string; senha: string;
               <td data-rotulo="E-mail">{{ u.email }}</td>
               <td data-rotulo="Perfil"><span class="selo">{{ rotulo[u.perfil] }}</span></td>
               <td data-rotulo="Situação"><span class="selo" [class.verde]="u.ativo">{{ u.ativo ? 'Ativo' : 'Inativo' }}</span></td>
-              <td class="acoes-cel"><button class="btn btn-sec btn-peq" (click)="editar(u)">Editar</button></td>
+              <td class="acoes-cel">@if (u.perfil !== 'SuperAdmin' || auth.temPerfil('SuperAdmin')) { <button class="btn btn-sec btn-peq" (click)="editar(u)">Editar</button> }</td>
             </tr>
           }
         </tbody>
@@ -63,6 +64,7 @@ interface FormUsuario { id?: number; nome: string; email: string; senha: string;
 })
 export class Usuarios {
   private api = inject(ApiService);
+  auth = inject(AuthService);
   rotulo = ROTULO;
   perfis = PERFIS;
   itens = signal<Usuario[]>([]);
