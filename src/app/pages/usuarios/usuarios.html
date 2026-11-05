@@ -1,0 +1,105 @@
+<div class="cabecalho">
+  <div>
+    <h1>Usuários e permissões</h1>
+    <p class="subtitulo">
+      Vendedor vê só os próprios registros · Gerente vê tudo e pode excluir · Administrador gerencia
+      usuários
+    </p>
+  </div>
+  <button class="btn" (click)="novo()">+ Novo usuário</button>
+</div>
+
+@if (erro()) {
+  <div class="msg-erro" role="alert">{{ erro() }}</div>
+}
+
+@if (editando(); as u) {
+  <form class="cartao" style="margin-bottom: 1rem" (ngSubmit)="salvar()" #f="ngForm">
+    <h2>{{ u.id ? 'Editar usuário' : 'Novo usuário' }}</h2>
+    <div class="form-grade">
+      <div class="campo">
+        <label for="u-n">Nome *</label
+        ><input id="u-n" name="nome" [(ngModel)]="u.nome" required maxlength="120" />
+      </div>
+      <div class="campo">
+        <label for="u-e">E-mail *</label
+        ><input id="u-e" name="email" type="email" [(ngModel)]="u.email" required />
+      </div>
+      <div class="campo">
+        <label for="u-s">{{ u.id ? 'Nova senha (opcional)' : 'Senha *' }}</label>
+        <input
+          id="u-s"
+          name="senha"
+          type="password"
+          [(ngModel)]="u.senha"
+          [required]="!u.id"
+          minlength="8"
+          autocomplete="new-password"
+        />
+      </div>
+      <div class="campo">
+        <label for="u-p">Perfil</label>
+        @if (u.perfil === 'SuperAdmin' || u.id === auth.usuario()?.id) {
+          <input id="u-p" name="perfil" [value]="rotulo[u.perfil]" disabled />
+        } @else {
+          <select id="u-p" name="perfil" [(ngModel)]="u.perfil">
+            @for (p of perfis; track p) {
+              <option [value]="p">{{ rotulo[p] }}</option>
+            }
+          </select>
+        }
+      </div>
+      <div class="campo">
+        <label for="u-a">Situação</label>
+        <select
+          id="u-a"
+          name="ativo"
+          [(ngModel)]="u.ativo"
+          [disabled]="u.id === auth.usuario()?.id"
+        >
+          <option [ngValue]="true">Ativo</option>
+          <option [ngValue]="false">Inativo</option>
+        </select>
+      </div>
+    </div>
+    <div class="acoes">
+      <button class="btn" type="submit" [disabled]="f.invalid">Salvar</button>
+      <button class="btn btn-sec" type="button" (click)="editando.set(null)">Cancelar</button>
+    </div>
+  </form>
+}
+
+<div class="cartao tabela-wrap" style="padding: 0">
+  <table class="responsiva">
+    <thead>
+      <tr>
+        <th>Nome</th>
+        <th>E-mail</th>
+        <th>Perfil</th>
+        <th>Situação</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (u of itens(); track u.id) {
+        <tr>
+          <td data-rotulo="Nome">
+            <strong>{{ u.nome }}</strong>
+          </td>
+          <td data-rotulo="E-mail">{{ u.email }}</td>
+          <td data-rotulo="Perfil">
+            <span class="selo">{{ rotulo[u.perfil] }}</span>
+          </td>
+          <td data-rotulo="Situação">
+            <span class="selo" [class.verde]="u.ativo">{{ u.ativo ? 'Ativo' : 'Inativo' }}</span>
+          </td>
+          <td class="acoes-cel">
+            @if (u.perfil !== 'SuperAdmin' || auth.temPerfil('SuperAdmin')) {
+              <button class="btn btn-sec btn-peq" (click)="editar(u)">Editar</button>
+            }
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>

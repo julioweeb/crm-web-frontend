@@ -6,7 +6,8 @@ import { TemaService } from './core/tema.service';
 @Component({
   selector: 'app-root',
   imports: [RouterOutlet],
-  template: '<router-outlet />'
+  templateUrl: './app.html',
+  styleUrl: './app.scss',
 })
 export class App {
   // Instanciados aqui para o tema ser aplicado e o evento de instalação ser capturado logo no início.

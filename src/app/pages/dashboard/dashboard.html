@@ -1,0 +1,96 @@
+<div class="cabecalho">
+  <div>
+    <h1>Olá, {{ primeiroNome() }}</h1>
+    <p class="subtitulo">Veja como estão suas vendas hoje.</p>
+  </div>
+  <a class="btn" routerLink="/funil">Abrir funil de vendas</a>
+</div>
+
+@if (erro()) {
+  <div class="msg-erro" role="alert">{{ erro() }}</div>
+}
+
+@if (r(); as d) {
+  <section class="cartao" aria-labelledby="t-funil">
+    <h2 id="t-funil" style="margin-bottom: 0.35rem">Negociações em aberto</h2>
+    <div class="total">{{ totalAberto() | currency: 'BRL' : 'symbol' : '1.0-0' }}</div>
+    <div class="subtitulo">{{ d.oportunidadesAbertas }} oportunidade(s) em andamento</div>
+
+    <div class="barra-funil" role="img" [attr.aria-label]="'Valor em aberto por estágio do funil'">
+      @for (e of abertos(); track e.estagio) {
+        @if (e.valor > 0) {
+          <span
+            [style.flex-grow]="e.valor"
+            [style.background]="cor[e.estagio]"
+            [title]="rotulo[e.estagio]"
+          ></span>
+        }
+      }
+    </div>
+
+    <div class="legenda">
+      @for (e of d.funilResumo; track e.estagio) {
+        <div class="item" [style.--cor]="cor[e.estagio]">
+          <div class="estagio">{{ rotulo[e.estagio] }}</div>
+          <div class="valor">{{ e.valor | currency: 'BRL' : 'symbol' : '1.0-0' }}</div>
+          <div class="qtd">
+            {{ e.quantidade }} {{ e.quantidade === 1 ? 'oportunidade' : 'oportunidades' }}
+          </div>
+        </div>
+      }
+    </div>
+  </section>
+
+  <section class="cartao faixa" aria-label="Indicadores">
+    <div>
+      <div class="rotulo">Ganho no mês</div>
+      <div class="valor">{{ d.valorGanhoNoMes | currency: 'BRL' : 'symbol' : '1.0-0' }}</div>
+    </div>
+    <div>
+      <div class="rotulo">Taxa de conversão</div>
+      <div class="valor">{{ d.taxaConversao | number: '1.0-1' }}%</div>
+    </div>
+    <div>
+      <div class="rotulo">Clientes</div>
+      <div class="valor">{{ d.totalClientes }}</div>
+    </div>
+    <div>
+      <div class="rotulo">Leads novos</div>
+      <div class="valor">{{ d.leadsNovos }}</div>
+    </div>
+  </section>
+
+  <div class="grade grade-2">
+    <section class="cartao">
+      <h2>Tarefas</h2>
+      <div class="tarefas">
+        <div>
+          <div class="grande">{{ d.tarefasPendentes }}</div>
+          <div class="legenda-t">pendentes</div>
+        </div>
+        <div>
+          <div class="grande" [class.alerta]="d.tarefasAtrasadas > 0">{{ d.tarefasAtrasadas }}</div>
+          <div class="legenda-t">atrasadas</div>
+        </div>
+      </div>
+      <a routerLink="/tarefas">Ver tarefas e agenda</a>
+    </section>
+
+    <section class="cartao">
+      <h2>Leads por status</h2>
+      @for (s of d.leadsPorStatus; track s.status) {
+        <div class="linha">
+          <span>{{ rotulo[s.status] }}</span>
+          <div class="trilho"><div [style.width.%]="pct(s.quantidade, maxLeads())"></div></div>
+          <span class="qtd-n">{{ s.quantidade }}</span>
+        </div>
+      } @empty {
+        <div class="vazio">
+          Nenhum lead cadastrado ainda. <a routerLink="/leads">Cadastrar o primeiro lead</a>
+        </div>
+      }
+    </section>
+  </div>
+} @else if (!erro()) {
+  <div class="vazio">Carregando indicadores...</div>
+}

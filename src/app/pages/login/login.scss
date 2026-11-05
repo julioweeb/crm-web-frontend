@@ -1,0 +1,110 @@
+.tela {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: minmax(320px, 5fr) 6fr;
+}
+.lado {
+  background: var(--brand-deep);
+  color: #e8f3f3;
+  padding: 3rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.lado .nome {
+  font-family: var(--fonte-titulo);
+  font-weight: 700;
+  font-size: 1.4rem;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+.lado .nome svg {
+  width: 32px;
+  height: 32px;
+}
+.lado h2 {
+  font-size: 2.3rem;
+  line-height: 1.1;
+  max-width: 14ch;
+  color: #fff;
+  margin: 0 0 1rem;
+}
+.lado p {
+  max-width: 34ch;
+  color: #b9d4d6;
+  margin: 0;
+}
+
+/* O funil, desenhado com as cores dos estágios */
+.funil {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 2.5rem 0;
+}
+.funil div {
+  height: 14px;
+  border-radius: 7px;
+}
+.funil div:nth-child(1) {
+  width: 100%;
+  background: var(--st-prospeccao);
+}
+.funil div:nth-child(2) {
+  width: 78%;
+  background: var(--st-qualificacao);
+}
+.funil div:nth-child(3) {
+  width: 56%;
+  background: #4aa6a8;
+}
+.funil div:nth-child(4) {
+  width: 36%;
+  background: var(--st-ganha);
+}
+
+.form-lado {
+  display: grid;
+  place-items: center;
+  padding: 2rem 1.25rem;
+}
+.caixa {
+  width: 100%;
+  max-width: 380px;
+}
+.caixa h1 {
+  margin-bottom: 0.4rem;
+}
+.link {
+  background: none;
+  border: 0;
+  color: var(--link);
+  cursor: pointer;
+  font: inherit;
+  font-weight: 600;
+  padding: 0;
+}
+.link:hover {
+  text-decoration: underline;
+}
+.dica {
+  font-size: 0.82rem;
+  color: var(--ink-3);
+}
+
+@media (max-width: 820px) {
+  .tela {
+    grid-template-columns: 1fr;
+  }
+  .lado {
+    padding: 1.5rem;
+    flex-direction: row;
+    align-items: center;
+  }
+  .lado h2,
+  .lado p,
+  .funil {
+    display: none;
+  }
+}

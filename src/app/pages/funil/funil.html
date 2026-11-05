@@ -1,0 +1,61 @@
+<div class="cabecalho">
+  <div>
+    <h1>Funil de vendas</h1>
+    <p class="subtitulo">
+      Arraste as oportunidades entre os estágios, ou use o seletor "Mover para" em cada cartão.
+    </p>
+  </div>
+</div>
+
+@if (erro()) {
+  <div class="msg-erro" role="alert">{{ erro() }}</div>
+}
+
+<div class="quadro">
+  @for (col of colunas(); track col.estagio) {
+    <section
+      class="coluna"
+      [class.alvo]="sobre() === col.estagio"
+      [style.--cor]="cor[col.estagio]"
+      (dragover)="$event.preventDefault(); sobre.set(col.estagio)"
+      (dragleave)="sobre.set(null)"
+      (drop)="soltar($event, col.estagio)"
+    >
+      <div class="topo">
+        <span class="ponto" aria-hidden="true"></span>
+        <h2>{{ rotulo[col.estagio] }}</h2>
+        <span class="contagem">{{ col.quantidade }}</span>
+      </div>
+      <p class="soma">{{ col.valorTotal | currency: 'BRL' }}</p>
+
+      @for (o of col.itens; track o.id) {
+        <article class="card" draggable="true" (dragstart)="arrastando = o">
+          <div class="tit">{{ o.titulo }}</div>
+          <div class="meta">
+            <a [routerLink]="['/clientes', o.clienteId]">{{ o.clienteNome }}</a>
+          </div>
+          <div class="meta">
+            <span class="preco">{{ o.valor | currency: 'BRL' }}</span
+            >, chance de {{ o.probabilidade }}%
+          </div>
+          @if (o.previsaoFechamento) {
+            <div class="meta">Previsão: {{ o.previsaoFechamento | date: 'dd/MM/yyyy' }}</div>
+          }
+          <select
+            [attr.aria-label]="'Mover ' + o.titulo"
+            (change)="mover(o, $any($event.target).value)"
+          >
+            <option value="">Mover para...</option>
+            @for (e of estagios; track e) {
+              @if (e !== o.estagio) {
+                <option [value]="e">{{ rotulo[e] }}</option>
+              }
+            }
+          </select>
+        </article>
+      } @empty {
+        <div class="vazio-col">Nenhuma oportunidade neste estágio</div>
+      }
+    </section>
+  }
+</div>
