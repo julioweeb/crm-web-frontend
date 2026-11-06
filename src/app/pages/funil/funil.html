@@ -2,6 +2,9 @@
   <div>
     <h1>Funil de vendas</h1>
     <p class="subtitulo">Arraste as oportunidades entre os estágios para atualizar o funil.</p>
+    @if (busca()) {
+      <p class="subtitulo">Resultado da busca: <strong>{{ busca() }}</strong> · <a routerLink="/funil">Limpar filtro</a></p>
+    }
   </div>
 </div>
 
@@ -9,8 +12,12 @@
   <div class="msg-erro" role="alert">{{ erro() }}</div>
 }
 
+@if (busca() && !colunasExibidas().length) {
+  <p class="vazio">Nenhuma oportunidade encontrada para “{{ busca() }}”.</p>
+}
+
 <div class="quadro">
-  @for (col of colunas(); track col.estagio) {
+  @for (col of colunasExibidas(); track col.estagio) {
     <section
       class="coluna"
       [class.alvo]="sobre() === col.estagio"
@@ -46,3 +53,6 @@
     </section>
   }
 </div>
+
+
+

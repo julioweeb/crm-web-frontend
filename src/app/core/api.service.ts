@@ -10,6 +10,7 @@ import {
   EstagioFunil,
   Interacao,
   Lead,
+  OportunidadeItem,
   Pagina,
   ResumoDashboard,
   Tarefa,
@@ -103,6 +104,9 @@ export class ApiService {
   }
 
   // ===== Oportunidades / funil =====
+  oportunidades(f?: Filtros) {
+    return this.http.get<Pagina<OportunidadeItem>>(`${API_URL}/oportunidades`, { params: this.params(f) });
+  }
   funil() {
     return this.http.get<ColunaFunil[]>(`${API_URL}/oportunidades/funil`);
   }
@@ -180,3 +184,6 @@ export class ApiService {
     return 'Ocorreu um erro inesperado.';
   }
 }
+
+
+

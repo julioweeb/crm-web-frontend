@@ -4,7 +4,70 @@
   </button>
   <svg class="topbar-logo" viewBox="0 0 32 32" aria-hidden="true"><use href="#logo" /></svg>
   <span class="topbar-nome">CRM</span>
-  <div class="topbar-espaco"></div>
+  <div class="busca-global" (click)="$event.stopPropagation()">
+    <div class="campo-busca-global">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8" /><path d="m16 16 5 5" /></svg>
+      <input
+        type="search"
+        aria-label="Buscar em clientes, leads e oportunidades"
+        placeholder="Buscar clientes, leads e oportunidades..."
+        [value]="termoBusca()"
+        (input)="buscarGlobal($any($event.target).value)"
+        (focus)="buscaAberta.set(true)"
+        (keydown.escape)="buscaAberta.set(false)"
+      />
+      @if (termoBusca()) {
+        <button class="limpar-busca-global" (click)="limparBusca()" aria-label="Limpar busca">×</button>
+      }
+    </div>
+    @if (buscaAberta()) {
+      <section class="resultados-busca-global" aria-label="Resultados da busca">
+        @if (termoBusca().trim().length < 2) {
+          <p class="estado-busca-global">Digite pelo menos 2 caracteres para buscar.</p>
+        } @else if (buscando()) {
+          <p class="estado-busca-global">Buscando...</p>
+        } @else if (erroBusca()) {
+          <p class="estado-busca-global">Não foi possível carregar os resultados. Tente novamente.</p>
+        } @else if (!resultadosBusca().clientes.length && !resultadosBusca().leads.length && !resultadosBusca().oportunidades.length) {
+          <p class="estado-busca-global">Nenhum resultado encontrado para “{{ termoBusca() }}”.</p>
+        } @else {
+          @if (resultadosBusca().clientes.length) {
+            <div class="grupo-busca-global">
+              <h2>Clientes</h2>
+              @for (cliente of resultadosBusca().clientes; track cliente.id) {
+                <a class="resultado-busca-global" [routerLink]="['/clientes', cliente.id]" (click)="buscaAberta.set(false)">
+                  <span class="tipo-resultado">C</span>
+                  <span><strong>{{ cliente.nome }}</strong><small>{{ cliente.email || cliente.empresa || 'Cliente' }}</small></span>
+                </a>
+              }
+            </div>
+          }
+          @if (resultadosBusca().leads.length) {
+            <div class="grupo-busca-global">
+              <h2>Leads</h2>
+              @for (lead of resultadosBusca().leads; track lead.id) {
+                <a class="resultado-busca-global" [routerLink]="['/leads']" [queryParams]="{ busca: lead.nome }" (click)="buscaAberta.set(false)">
+                  <span class="tipo-resultado lead">L</span>
+                  <span><strong>{{ lead.nome }}</strong><small>{{ lead.empresa || lead.email || rotulo[lead.status] }}</small></span>
+                </a>
+              }
+            </div>
+          }
+          @if (resultadosBusca().oportunidades.length) {
+            <div class="grupo-busca-global">
+              <h2>Oportunidades</h2>
+              @for (oportunidade of resultadosBusca().oportunidades; track oportunidade.id) {
+                <a class="resultado-busca-global" [routerLink]="['/funil']" [queryParams]="{ busca: oportunidade.titulo }" (click)="buscaAberta.set(false)">
+                  <span class="tipo-resultado oportunidade">O</span>
+                  <span><strong>{{ oportunidade.titulo }}</strong><small>{{ oportunidade.clienteNome }} · {{ rotulo[oportunidade.estagio] }}</small></span>
+                </a>
+              }
+            </div>
+          }
+        }
+      </section>
+    }
+  </div>
   <div class="notificacoes" (click)="$event.stopPropagation()">
     <button
       class="btn-notificacoes"
@@ -76,6 +139,7 @@
     <router-outlet />
   </div>
 </main>
+
 
 
 

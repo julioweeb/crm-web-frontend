@@ -1,5 +1,7 @@
 import { Component, computed, inject, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { DatePipe } from '@angular/common';
+import { ActivatedRoute } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { ApiService } from '../../core/api.service';
 import { Lead, ROTULO, STATUS_LEAD } from '../../core/models';
@@ -12,6 +14,7 @@ import { Lead, ROTULO, STATUS_LEAD } from '../../core/models';
 })
 export class Leads {
   private api = inject(ApiService);
+  private route = inject(ActivatedRoute);
   rotulo = ROTULO;
   statusLista = STATUS_LEAD;
 
@@ -27,7 +30,10 @@ export class Leads {
   status = '';
 
   constructor() {
-    this.carregar();
+    this.route.queryParamMap.pipe(takeUntilDestroyed()).subscribe((params) => {
+      this.busca = params.get('busca') ?? '';
+      this.carregar();
+    });
   }
 
   irPara(p: number) {
@@ -100,3 +106,6 @@ export class Leads {
       });
   }
 }
+
+
+
