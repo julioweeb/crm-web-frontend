@@ -17,7 +17,11 @@ export class AuthService {
   readonly logado = computed(() => this.usuario() !== null && !!this.token);
 
   get token(): string | null {
-    try { return sessionStorage.getItem(CHAVE_TOKEN); } catch { return null; }
+    try {
+      return sessionStorage.getItem(CHAVE_TOKEN);
+    } catch {
+      return null;
+    }
   }
 
   temPerfil(...perfis: Perfil[]): boolean {
@@ -26,16 +30,27 @@ export class AuthService {
   }
 
   login(email: string, senha: string) {
-    return this.http.post<AuthResposta>(`${API_URL}/auth/login`, { email, senha })
-      .pipe(tap(r => this.guardar(r)));
+    return this.http
+      .post<AuthResposta>(`${API_URL}/auth/login`, { email, senha })
+      .pipe(tap((r) => this.guardar(r)));
   }
 
+  atualizarUsuarioAtual(usuario: Usuario) {
+    try {
+      sessionStorage.setItem(CHAVE_USUARIO, JSON.stringify(usuario));
+    } catch {
+      /* ignora */
+    }
+    this.usuario.set(usuario);
+  }
 
   sair() {
     try {
       sessionStorage.removeItem(CHAVE_TOKEN);
       sessionStorage.removeItem(CHAVE_USUARIO);
-    } catch { /* ignora */ }
+    } catch {
+      /* ignora */
+    }
     this.usuario.set(null);
     this.router.navigate(['/login']);
   }
@@ -45,7 +60,9 @@ export class AuthService {
     try {
       sessionStorage.setItem(CHAVE_TOKEN, r.token);
       sessionStorage.setItem(CHAVE_USUARIO, JSON.stringify(r.usuario));
-    } catch { /* ignora */ }
+    } catch {
+      /* ignora */
+    }
     this.usuario.set(r.usuario);
   }
 
@@ -53,6 +70,8 @@ export class AuthService {
     try {
       const bruto = sessionStorage.getItem(CHAVE_USUARIO);
       return bruto ? (JSON.parse(bruto) as Usuario) : null;
-    } catch { return null; }
+    } catch {
+      return null;
+    }
   }
 }

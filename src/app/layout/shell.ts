@@ -1,69 +1,70 @@
-import { Component, computed, inject, signal } from '@angular/core';
-import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
-import { AuthService } from '../core/auth.service';
-import { InstalarService } from '../core/instalar.service';
-import { Perfil, ROTULO } from '../core/models';
-import { TemaService } from '../core/tema.service';
-
-interface ItemMenu {
-  rota: string;
-  texto: string;
-  icone: string;
-  so?: Perfil[];
-}
+import { DatePipe } from '@angular/common';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Component, computed, DestroyRef, HostListener, inject, signal } from '@angular/core';
+import { RouterLink, RouterOutlet } from '@angular/router';
+import { catchError, forkJoin, of, switchMap, timer } from 'rxjs';
+import { ApiService } from '../core/api.service';
+import { Tarefa } from '../core/models';
+import { Sidebar } from './sidebar';
 
 @Component({
   selector: 'app-shell',
-  imports: [RouterOutlet, RouterLink, RouterLinkActive],
+  imports: [RouterOutlet, RouterLink, DatePipe, Sidebar],
   templateUrl: './shell.html',
   styleUrl: './shell.scss',
 })
 export class Shell {
-  auth = inject(AuthService);
-  tema = inject(TemaService);
-  instalar = inject(InstalarService);
-  rotulo = ROTULO;
+  private api = inject(ApiService);
+  private destroyRef = inject(DestroyRef);
   menuAberto = signal(false);
+  painelNotificacoes = signal(false);
+  tarefasNotificacao = signal<Tarefa[]>([]);
+  totalNotificacoes = computed(() => this.tarefasNotificacao().length);
 
-  private todos: ItemMenu[] = [
-    {
-      rota: '/dashboard',
-      texto: 'Dashboard',
-      icone: 'M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h6v6h-6z',
-    },
-    {
-      rota: '/clientes',
-      texto: 'Clientes',
-      icone:
-        'M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2M9 11a4 4 0 100-8 4 4 0 000 8zM22 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75',
-    },
-    {
-      rota: '/leads',
-      texto: 'Leads',
-      icone:
-        'M22 12h-6l-2 3h-4l-2-3H2M5.5 5.1L2 12v6a2 2 0 002 2h16a2 2 0 002-2v-6l-3.5-6.9A2 2 0 0016.8 4H7.2a2 2 0 00-1.7 1.1z',
-    },
-    { rota: '/funil', texto: 'Funil de vendas', icone: 'M22 3H2l8 9.5V19l4 2v-8.5z' },
-    {
-      rota: '/tarefas',
-      texto: 'Tarefas e agenda',
-      icone:
-        'M8 2v4M16 2v4M3 10h18M5 4h14a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V6a2 2 0 012-2z',
-    },
-    {
-      rota: '/usuarios',
-      texto: 'Usuários',
-      icone: 'M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z',
-      so: ['Admin', 'SuperAdmin'],
-    },
-    {
-      rota: '/empresas',
-      texto: 'Empresas',
-      icone: 'M3 21h18M5 21V7l8-4 8 4v14M9 9h1m4 0h1m-6 4h1m4 0h1m-5 8v-4h4v4',
-      so: ['SuperAdmin'],
-    },
-  ];
+  constructor() {
+    timer(0, 60_000)
+      .pipe(
+        switchMap(() => {
+          const agora = new Date();
+          const inicioHoje = new Date(agora.getFullYear(), agora.getMonth(), agora.getDate());
+          const inicioAmanha = new Date(agora.getFullYear(), agora.getMonth(), agora.getDate() + 1);
+          return forkJoin({
+            atrasadas: this.api.tarefas({ atrasadas: true, tamanho: 100 }),
+            hoje: this.api.tarefas({ de: inicioHoje.toISOString(), ate: inicioAmanha.toISOString(), tamanho: 100 }),
+          }).pipe(catchError(() => of(null)));
+        }),
+        takeUntilDestroyed(this.destroyRef),
+      )
+      .subscribe((resultado) => {
+        if (!resultado) return;
+        const inicioAmanha = new Date();
+        inicioAmanha.setHours(0, 0, 0, 0);
+        inicioAmanha.setDate(inicioAmanha.getDate() + 1);
+        const unicas = new Map<number, Tarefa>();
+        for (const tarefa of [...resultado.atrasadas.itens, ...resultado.hoje.itens]) {
+          if (tarefa.status !== 'Concluida' && new Date(tarefa.dataVencimento) < inicioAmanha) {
+            unicas.set(tarefa.id, tarefa);
+          }
+        }
+        this.tarefasNotificacao.set(
+          [...unicas.values()].sort((a, b) => a.dataVencimento.localeCompare(b.dataVencimento)),
+        );
+      });
+  }
 
-  itens = computed(() => this.todos.filter((i) => !i.so || this.auth.temPerfil(...i.so!)));
-  inicial = computed(() => (this.auth.usuario()?.nome ?? '?').trim().charAt(0).toUpperCase());
+  @HostListener('document:click')
+  fecharNotificacoes() {
+    this.painelNotificacoes.set(false);
+  }
+
+  @HostListener('document:keydown.escape')
+  fecharNotificacoesComEscape() {
+    this.painelNotificacoes.set(false);
+  }
+
+  tarefaAtrasada(tarefa: Tarefa) {
+    return new Date(tarefa.dataVencimento) < new Date();
+  }
 }
+
+

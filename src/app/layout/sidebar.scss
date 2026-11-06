@@ -1,0 +1,111 @@
+:host { display: contents; }
+
+.sidebar {
+  position: fixed;
+  inset: 0 auto 0 0;
+  z-index: 30;
+  display: flex;
+  flex-direction: column;
+  width: var(--lateral);
+  padding: 1.5rem 1rem;
+  border-right: 1px solid color-mix(in srgb, var(--line) 75%, transparent);
+  background: var(--surface);
+  box-shadow: 10px 0 35px rgb(26 48 66 / 4%);
+}
+.marca {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  padding: .35rem .65rem 1.75rem;
+  font: 700 1.35rem var(--fonte-titulo);
+  letter-spacing: -.02em;
+}
+.marca svg { width: 34px; height: 34px; flex: none; }
+.sidebar nav { display: flex; flex: 1; flex-direction: column; gap: .35rem; }
+.sidebar nav a, .link-perfil {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  min-height: 44px;
+  padding: .68rem .8rem;
+  border-radius: 12px;
+  color: var(--ink-2);
+  font-weight: 500;
+  text-decoration: none;
+  transition: color .16s ease, background .16s ease, transform .16s ease;
+}
+.sidebar nav a svg, .link-perfil svg {
+  width: 19px;
+  height: 19px;
+  flex: none;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.sidebar nav a:hover, .link-perfil:hover { transform: translateX(2px); background: var(--canvas); color: var(--ink); }
+.sidebar nav a.ativo, .link-perfil.ativo {
+  background: var(--brand-soft);
+  box-shadow: inset 3px 0 0 var(--brand);
+  color: var(--brand-ink);
+  font-weight: 600;
+}
+.link-perfil { margin: 0 0 1rem; }
+.usuario {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  padding: 1rem .25rem .1rem;
+  border-top: 1px solid var(--line);
+}
+.avatar {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--brand);
+  color: #fff;
+  font: 600 1rem var(--fonte-titulo);
+}
+.usuario .quem { min-width: 0; flex: 1; line-height: 1.25; }
+.usuario .nome { overflow: hidden; font-weight: 600; text-overflow: ellipsis; white-space: nowrap; }
+.usuario .perfil { color: var(--ink-3); font-size: .8rem; }
+.btn-tema, .btn-sair {
+  display: grid;
+  padding: .3rem;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--ink-3);
+  cursor: pointer;
+}
+.btn-tema:hover { background: var(--canvas); color: var(--ink); }
+.btn-sair:hover { background: var(--canvas); color: var(--danger); }
+.btn-tema svg, .btn-sair svg { width: 19px; height: 19px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+.btn-instalar {
+  display: flex;
+  align-items: center;
+  gap: .6rem;
+  width: 100%;
+  margin: 0 0 .75rem;
+  padding: .6rem .75rem;
+  border: 0;
+  border-radius: var(--raio);
+  background: var(--brand-soft);
+  color: var(--brand-ink);
+  cursor: pointer;
+  font: 600 .9rem var(--fonte-texto);
+}
+.btn-instalar:hover { filter: brightness(1.06); }
+.btn-instalar svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+
+@media (max-width: 900px) {
+  .sidebar { transform: translateX(-100%); transition: transform .2s ease; }
+  .sidebar.aberto { transform: translateX(0); box-shadow: 0 0 40px rgb(20 35 43 / 25%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .sidebar nav a, .link-perfil { transition: none; }
+}

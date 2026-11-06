@@ -1,9 +1,7 @@
 <div class="cabecalho">
   <div>
     <h1>Funil de vendas</h1>
-    <p class="subtitulo">
-      Arraste as oportunidades entre os estágios, ou use o seletor "Mover para" em cada cartão.
-    </p>
+    <p class="subtitulo">Arraste as oportunidades entre os estágios para atualizar o funil.</p>
   </div>
 </div>
 
@@ -41,17 +39,6 @@
           @if (o.previsaoFechamento) {
             <div class="meta">Previsão: {{ o.previsaoFechamento | date: 'dd/MM/yyyy' }}</div>
           }
-          <select
-            [attr.aria-label]="'Mover ' + o.titulo"
-            (change)="mover(o, $any($event.target).value)"
-          >
-            <option value="">Mover para...</option>
-            @for (e of estagios; track e) {
-              @if (e !== o.estagio) {
-                <option [value]="e">{{ rotulo[e] }}</option>
-              }
-            }
-          </select>
         </article>
       } @empty {
         <div class="vazio-col">Nenhuma oportunidade neste estágio</div>

@@ -1,1 +1,162 @@
-/* Estilos específicos deste componente. */
+:host { display: block; }
+
+.topbar {
+  position: fixed;
+  inset: 0 0 auto var(--lateral);
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  height: 68px;
+  gap: .75rem;
+  padding: 0 2.5rem;
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+  color: var(--ink);
+}
+.topbar-logo, .topbar-nome, .btn-icone { display: none; }
+.topbar-espaco { flex: 1; }
+
+.notificacoes { position: relative; }
+.btn-notificacoes {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: 12px;
+  background: transparent;
+  color: var(--ink-2);
+  cursor: pointer;
+  transition: background .16s ease, color .16s ease, border-color .16s ease;
+}
+.btn-notificacoes:hover, .btn-notificacoes[aria-expanded='true'] {
+  background: var(--brand-soft);
+  border-color: color-mix(in srgb, var(--brand) 14%, transparent);
+  color: var(--brand-ink);
+}
+.btn-notificacoes svg { width: 21px; height: 21px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.sino-contador {
+  position: absolute;
+  top: 1px;
+  right: 0;
+  display: grid;
+  place-items: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 4px;
+  border: 2px solid var(--surface);
+  border-radius: 999px;
+  background: var(--danger);
+  color: #fff;
+  font: 700 .65rem/1 var(--fonte-texto);
+}
+
+.painel-notificacoes {
+  position: absolute;
+  top: calc(100% + .65rem);
+  right: 0;
+  z-index: 50;
+  width: min(380px, calc(100vw - 2rem));
+  max-height: min(560px, calc(100vh - 90px));
+  overflow: auto;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: var(--surface);
+  box-shadow: 0 18px 55px rgb(20 35 43 / 18%);
+}
+.notificacoes-titulo {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem 1.1rem;
+  border-bottom: 1px solid var(--line);
+  background: var(--surface);
+}
+.notificacoes-titulo > div { display: grid; gap: .12rem; }
+.notificacoes-titulo strong { color: var(--ink); font: 650 1rem var(--fonte-titulo); }
+.notificacoes-titulo span { color: var(--ink-3); font-size: .8rem; }
+.fechar-notificacoes {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--ink-3);
+  font-size: 1.4rem;
+  cursor: pointer;
+}
+.fechar-notificacoes:hover { background: var(--canvas); color: var(--ink); }
+.lista-notificacoes { padding: .35rem; }
+.item-notificacao {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  padding: .75rem;
+  border-radius: 11px;
+  color: var(--ink);
+  text-decoration: none;
+}
+.item-notificacao:hover { background: var(--canvas); }
+.notificacao-icone {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  flex: none;
+  border-radius: 11px;
+  background: var(--brand-soft);
+  color: var(--brand-ink);
+}
+.notificacao-icone.atrasada { background: var(--danger-soft); color: var(--danger); }
+.notificacao-icone svg, .notificacao-seta { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.notificacao-conteudo { display: grid; min-width: 0; flex: 1; gap: .18rem; }
+.notificacao-conteudo strong { overflow: hidden; color: var(--ink); font-size: .88rem; text-overflow: ellipsis; white-space: nowrap; }
+.notificacao-conteudo span { color: var(--ink-3); font-size: .78rem; }
+.notificacao-seta { flex: none; color: var(--ink-3); }
+.notificacoes-vazio { margin: 0; padding: 2rem 1rem; color: var(--ink-2); text-align: center; }
+.ver-todas-notificacoes {
+  display: block;
+  padding: .85rem 1rem;
+  border-top: 1px solid var(--line);
+  color: var(--link);
+  font-size: .85rem;
+  font-weight: 600;
+  text-align: center;
+  text-decoration: none;
+}
+.ver-todas-notificacoes:hover { background: var(--canvas); }
+
+.conteudo { padding-top: 5.5rem; }
+
+@media (max-width: 900px) {
+  .topbar {
+    position: sticky;
+    inset: auto;
+    height: 56px;
+    gap: .65rem;
+    padding: .5rem 1rem;
+  }
+  .btn-icone {
+    display: inline-grid;
+    place-items: center;
+    padding: .2rem .4rem;
+    border: 0;
+    border-radius: 8px;
+    background: transparent;
+    color: var(--ink);
+    font-size: 1.5rem;
+    line-height: 1;
+    cursor: pointer;
+  }
+  .topbar-logo { display: block; width: 26px; height: 26px; }
+  .topbar-nome { display: block; font: 700 1.15rem var(--fonte-titulo); }
+  .conteudo { padding: 1.25rem 1rem 2rem; }
+}

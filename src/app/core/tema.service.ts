@@ -31,6 +31,7 @@ export class TemaService {
     document.documentElement.setAttribute('data-tema', tema);
     // Cor da barra de status do celular / janela do app instalado.
     document.querySelector('meta[name="theme-color"]')
-      ?.setAttribute('content', tema === 'escuro' ? '#162129' : '#ffffff');
+      ?.setAttribute('content', tema === 'escuro' ? '#162129' : '#f4f6f7');
   }
 }
+

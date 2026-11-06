@@ -2,8 +2,57 @@
   <button class="btn-icone" (click)="menuAberto.set(!menuAberto())" aria-label="Abrir menu">
     ☰
   </button>
-  <svg viewBox="0 0 32 32" aria-hidden="true"><use href="#logo" /></svg>
-  CRM
+  <svg class="topbar-logo" viewBox="0 0 32 32" aria-hidden="true"><use href="#logo" /></svg>
+  <span class="topbar-nome">CRM</span>
+  <div class="topbar-espaco"></div>
+  <div class="notificacoes" (click)="$event.stopPropagation()">
+    <button
+      class="btn-notificacoes"
+      (click)="painelNotificacoes.set(!painelNotificacoes())"
+      [attr.aria-label]="totalNotificacoes() ? totalNotificacoes() + ' notificações' : 'Notificações'"
+      [attr.aria-expanded]="painelNotificacoes()"
+      title="Notificações"
+    >
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M18 8a6 6 0 00-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4" />
+      </svg>
+      @if (totalNotificacoes() > 0) {
+        <span class="sino-contador">{{ totalNotificacoes() > 9 ? '9+' : totalNotificacoes() }}</span>
+      }
+    </button>
+    @if (painelNotificacoes()) {
+      <section class="painel-notificacoes" aria-label="Notificações de tarefas">
+        <div class="notificacoes-titulo">
+          <div>
+            <strong>Notificações</strong>
+            <span>{{ totalNotificacoes() }} {{ totalNotificacoes() === 1 ? 'tarefa pendente' : 'tarefas pendentes' }}</span>
+          </div>
+          <button class="fechar-notificacoes" (click)="painelNotificacoes.set(false)" aria-label="Fechar notificações">×</button>
+        </div>
+        @if (tarefasNotificacao().length === 0) {
+          <p class="notificacoes-vazio">Tudo em dia por aqui.</p>
+        } @else {
+          <div class="lista-notificacoes">
+            @for (tarefa of tarefasNotificacao(); track tarefa.id) {
+              <a class="item-notificacao" routerLink="/tarefas" (click)="painelNotificacoes.set(false)">
+                <span class="notificacao-icone" [class.atrasada]="tarefaAtrasada(tarefa)">
+                  <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M8 2v4M16 2v4M3 10h18M5 4h14a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V6a2 2 0 012-2z" />
+                  </svg>
+                </span>
+                <span class="notificacao-conteudo">
+                  <strong>{{ tarefa.titulo }}</strong>
+                  <span>{{ tarefaAtrasada(tarefa) ? 'Atrasada' : 'Vence hoje' }} · {{ tarefa.dataVencimento | date:'HH:mm' }}</span>
+                </span>
+                <svg class="notificacao-seta" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6" /></svg>
+              </a>
+            }
+          </div>
+          <a class="ver-todas-notificacoes" routerLink="/tarefas" (click)="painelNotificacoes.set(false)">Ver tarefas e agenda</a>
+        }
+      </section>
+    }
+  </div>
 </header>
 
 <!-- Símbolo do funil: barras que estreitam, nas cores dos estágios -->
@@ -16,58 +65,7 @@
   </symbol>
 </svg>
 
-<aside class="sidebar" [class.aberto]="menuAberto()">
-  <div class="marca">
-    <svg viewBox="0 0 32 32" aria-hidden="true"><use href="#logo" /></svg>CRM
-  </div>
-
-  <nav (click)="menuAberto.set(false)" aria-label="Principal">
-    @for (item of itens(); track item.rota) {
-      <a [routerLink]="item.rota" routerLinkActive="ativo">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path [attr.d]="item.icone" /></svg>
-        {{ item.texto }}
-      </a>
-    }
-  </nav>
-
-  @if (instalar.disponivel()) {
-    <button class="btn-instalar" (click)="instalar.instalar()">
-      <svg viewBox="0 0 24 24" aria-hidden="true">
-        <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3" />
-      </svg>
-      Instalar app
-    </button>
-  }
-
-  <div class="usuario">
-    <div class="avatar" aria-hidden="true">{{ inicial() }}</div>
-    <div class="quem">
-      <div class="nome">{{ auth.usuario()?.nome }}</div>
-      <div class="perfil">{{ rotulo[auth.usuario()?.perfil ?? ''] }}</div>
-    </div>
-    <button
-      class="btn-tema"
-      (click)="tema.alternar()"
-      [attr.aria-label]="tema.tema() === 'escuro' ? 'Usar tema claro' : 'Usar tema escuro'"
-      [title]="tema.tema() === 'escuro' ? 'Tema claro' : 'Tema escuro'"
-    >
-      <svg viewBox="0 0 24 24" aria-hidden="true">
-        @if (tema.tema() === 'escuro') {
-          <path
-            d="M12 17a5 5 0 100-10 5 5 0 000 10zM12 1v2M12 21v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M1 12h2M21 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4"
-          />
-        } @else {
-          <path d="M21 12.8A9 9 0 1111.2 3a7 7 0 009.8 9.8z" />
-        }
-      </svg>
-    </button>
-    <button class="btn-sair" (click)="auth.sair()" aria-label="Sair" title="Sair">
-      <svg viewBox="0 0 24 24">
-        <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9" />
-      </svg>
-    </button>
-  </div>
-</aside>
+<app-sidebar [aberto]="menuAberto()" (fechar)="menuAberto.set(false)" />
 
 @if (menuAberto()) {
   <div class="fundo-menu" (click)="menuAberto.set(false)"></div>
@@ -78,3 +76,6 @@
     <router-outlet />
   </div>
 </main>
+
+
+

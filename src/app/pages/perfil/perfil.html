@@ -1,0 +1,121 @@
+<div class="cabecalho">
+  <div>
+    <h1>Meu perfil</h1>
+    <p class="subtitulo">Atualize seus dados pessoais e as informações de acesso.</p>
+  </div>
+</div>
+
+@if (erro()) {
+  <div class="msg-erro" role="alert">{{ erro() }}</div>
+}
+@if (sucesso()) {
+  <div class="msg-ok" role="status">{{ sucesso() }}</div>
+}
+
+<form class="perfil-form cartao" (ngSubmit)="salvar()" #f="ngForm">
+  <section class="perfil-secao" aria-labelledby="dados-pessoais">
+    <div class="perfil-titulo">
+      <div>
+        <h2 id="dados-pessoais">Dados pessoais</h2>
+        <p class="subtitulo">O e-mail também é usado para entrar no CRM.</p>
+      </div>
+      <span class="avatar-grande" aria-hidden="true">{{
+        nome.trim().charAt(0).toUpperCase() || '?'
+      }}</span>
+    </div>
+    <div class="form-grade">
+      <div class="campo">
+        <label for="perfil-nome">Nome</label>
+        <input
+          id="perfil-nome"
+          name="nome"
+          [(ngModel)]="nome"
+          required
+          maxlength="120"
+          autocomplete="name"
+        />
+      </div>
+      <div class="campo">
+        <label for="perfil-email">E-mail de acesso</label>
+        <input
+          id="perfil-email"
+          name="email"
+          type="email"
+          [(ngModel)]="email"
+          required
+          maxlength="160"
+          autocomplete="email"
+        />
+      </div>
+    </div>
+  </section>
+
+  <section class="perfil-secao" aria-labelledby="dados-acesso">
+    <h2 id="dados-acesso">Alterar senha</h2>
+    <p class="subtitulo">Deixe estes campos vazios se não quiser trocar a senha.</p>
+    <div class="form-grade">
+      <div class="campo">
+        <label for="senha-atual">Senha atual</label>
+        <input
+          id="senha-atual"
+          name="senhaAtual"
+          type="password"
+          [(ngModel)]="senhaAtual"
+          autocomplete="current-password"
+        />
+      </div>
+      <div class="campo">
+        <label for="senha-nova">Nova senha</label>
+        <input
+          id="senha-nova"
+          name="novaSenha"
+          type="password"
+          [(ngModel)]="novaSenha"
+          autocomplete="new-password"
+        />
+      </div>
+      <div class="campo">
+        <label for="senha-confirmacao">Confirme a nova senha</label>
+        <input
+          id="senha-confirmacao"
+          name="confirmarSenha"
+          type="password"
+          [(ngModel)]="confirmarSenha"
+          autocomplete="new-password"
+        />
+      </div>
+    </div>
+    <p class="dica">
+      Use pelo menos 8 caracteres, com letras e números. A senha atual será solicitada para
+      confirmar a troca.
+    </p>
+  </section>
+
+  <section class="perfil-secao perfil-permissoes" aria-labelledby="dados-gerenciados">
+    <h2 id="dados-gerenciados">Dados gerenciados pelo administrador</h2>
+    <div class="form-grade">
+      <div class="campo">
+        <label for="perfil-acesso">Perfil de acesso</label>
+        <input id="perfil-acesso" [value]="rotulo[auth.usuario()?.perfil ?? '']" disabled />
+      </div>
+      <div class="campo">
+        <label for="perfil-situacao">Situação</label>
+        <input
+          id="perfil-situacao"
+          [value]="auth.usuario()?.ativo ? 'Ativo' : 'Inativo'"
+          disabled
+        />
+      </div>
+    </div>
+    <p class="dica">
+      Seu perfil, situação e empresa são controlados pelo administrador da plataforma ou da sua
+      empresa.
+    </p>
+  </section>
+
+  <div class="acoes">
+    <button class="btn" type="submit" [disabled]="f.invalid || salvando()">
+      {{ salvando() ? 'Salvando...' : 'Salvar alterações' }}
+    </button>
+  </div>
+</form>
