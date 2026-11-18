@@ -1,36 +1,79 @@
-# CRM – Front-end (Angular)
+# CRM — Front-end
 
-Interface do CRM em **Angular** (componentes standalone, signals, lazy loading), responsiva para computador, tablet e celular.
-A API fica em um repositório separado (`crm-backend`, ASP.NET Core).
+Interface web do CRM multiempresa, desenvolvida em Angular. O front-end consome a API ASP.NET Core do projeto de back-end disponível no GitHub.
 
-## Telas
-Login/cadastro · Dashboard · Clientes (com contatos, histórico e anotações) · Leads · Funil de vendas (arrastar e soltar) · Tarefas e agenda · Usuários (somente Admin).
+- **Aplicação:** [crm-web-frontend-eta.vercel.app](https://crm-web-frontend-eta.vercel.app)
+- **API:** [crm-api-lbhm.onrender.com](https://crm-api-lbhm.onrender.com)
 
-## Como rodar
-Pré-requisito: Node 20+ e a API rodando.
+## Demonstração
+
+- **Empresa:** Demonstração Enterprise
+- **E-mail:** `demonstracao@demo.com`
+- **Senha:** `User123@`
+- **Perfil:** Admiinistrador
+
+Esta é uma conta pública compartilhada para demonstração. Não armazene nela dados pessoais, reais ou confidenciais.
+
+## Funcionalidades
+
+- Login e gerenciamento do perfil do usuário.
+- Dashboard, clientes, contatos e histórico de interações.
+- Leads e conversão em clientes.
+- Funil de vendas com movimentação de oportunidades.
+- Tarefas e agenda.
+- Usuários e empresas conforme o perfil de acesso.
+- Interface responsiva para computador, tablet e celular.
+
+## Tecnologias
+
+- Angular e TypeScript
+- Componentes standalone e carregamento sob demanda
+- RxJS
+- CSS
+
+## Executar localmente
+
+Pré-requisitos: Node.js e npm instalados, além da API em execução ou acessível.
 
 ```bash
-npm install
-npx ng serve      # http://localhost:4200
+npm ci
+npm start
 ```
 
-### Endereço da API
-Ajuste em [`src/app/core/config.ts`](src/app/core/config.ts):
+O servidor local do Angular abre em `http://localhost:4200`.
 
-```ts
-export const API_URL = 'http://localhost:5080/api';
+### Configurar o endereço da API
+
+O endereço é definido em `public/config.js`, que é carregado pela aplicação no navegador. O arquivo no repositório está configurado para a API publicada. Para desenvolvimento local, altere o valor para:
+
+```js
+window.__CRM_CONFIG__ = {
+  apiUrl: 'http://localhost:5080/api'
+};
 ```
 
-Ao publicar, troque pela URL da API em produção (terminando em `/api`) e libere a URL deste front no CORS da API (`Cors:Origens`).
+Antes de publicar, confirme que o arquivo aponta para o endereço da API desejada e termina em `/api`. A API também precisa permitir a origem do front-end na configuração de CORS.
 
-## Build e testes
+## Build
+
+Para gerar a versão de produção:
+
 ```bash
-npx ng build                  # saída em dist/crm-web/browser
-npx ng test --watch=false
+npm run build
 ```
 
-## Deploy (Vercel / Netlify)
-Publique `dist/crm-web/browser` com regra de fallback para `index.html` (o app usa rotas do Angular).
+Os arquivos são gerados em `dist/crm-web/browser`.
+
+## Publicação na Vercel
+
+O repositório inclui `vercel.json` com fallback para `index.html`, necessário para as rotas do Angular. Na configuração do projeto Vercel, use:
+
+- **Framework Preset:** Angular
+- **Build Command:** `npm run build`
+- **Output Directory:** `dist/crm-web/browser`
+
+O endereço da API publicado fica em `public/config.js`. Após alterar esse arquivo, faça novo commit e deploy.
 
 ## Segurança
-O token JWT fica em `sessionStorage` (some ao fechar a aba); toda chamada à API leva `Authorization: Bearer`, e um 401 desloga o usuário. As rotas são protegidas por guards, mas a autorização real é sempre feita pela API.
+
+O front-end mantém o token de autenticação na sessão do navegador e o envia à API nas requisições protegidas. A autorização efetiva e o isolamento dos dados são aplicados pelo back-end. A conta de demonstração é pública; use-a apenas com dados fictícios.
