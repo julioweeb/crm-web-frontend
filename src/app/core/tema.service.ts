@@ -16,14 +16,14 @@ export class TemaService {
     const novo: Tema = this.tema() === 'escuro' ? 'claro' : 'escuro';
     this.tema.set(novo);
     this.aplicar(novo);
-    try { localStorage.setItem(CHAVE, novo); } catch { /* sem armazenamento: vale só nesta sessão */ }
+    try { localStorage.setItem(CHAVE, novo); } catch {}
   }
 
   private inicial(): Tema {
     try {
       const salvo = localStorage.getItem(CHAVE);
       if (salvo === 'claro' || salvo === 'escuro') return salvo;
-    } catch { /* ignora */ }
+    } catch {}
     return window.matchMedia?.('(prefers-color-scheme: dark)').matches ? 'escuro' : 'claro';
   }
 

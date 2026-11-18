@@ -31,12 +31,10 @@ export class ApiService {
     return p;
   }
 
-  // ===== Dashboard =====
   dashboard() {
     return this.http.get<ResumoDashboard>(`${API_URL}/dashboard`);
   }
 
-  // ===== Clientes =====
   clientes(f?: Filtros) {
     return this.http.get<Pagina<Cliente>>(`${API_URL}/clientes`, { params: this.params(f) });
   }
@@ -70,7 +68,6 @@ export class ApiService {
     return this.http.post<Interacao>(`${API_URL}/clientes/${clienteId}/interacoes`, i);
   }
 
-  // ===== Anotações =====
   anotacoes(f: Filtros) {
     return this.http.get<Anotacao[]>(`${API_URL}/anotacoes`, { params: this.params(f) });
   }
@@ -86,7 +83,6 @@ export class ApiService {
     return this.http.delete<void>(`${API_URL}/anotacoes/${id}`);
   }
 
-  // ===== Leads =====
   leads(f?: Filtros) {
     return this.http.get<Pagina<Lead>>(`${API_URL}/leads`, { params: this.params(f) });
   }
@@ -103,7 +99,6 @@ export class ApiService {
     return this.http.post<Cliente>(`${API_URL}/leads/${id}/converter`, {});
   }
 
-  // ===== Oportunidades / funil =====
   oportunidades(f?: Filtros) {
     return this.http.get<Pagina<OportunidadeItem>>(`${API_URL}/oportunidades`, { params: this.params(f) });
   }
@@ -127,7 +122,6 @@ export class ApiService {
     return this.http.delete<void>(`${API_URL}/oportunidades/${id}`);
   }
 
-  // ===== Tarefas =====
   tarefas(f?: Filtros) {
     return this.http.get<Pagina<Tarefa>>(`${API_URL}/tarefas`, { params: this.params(f) });
   }
@@ -141,14 +135,12 @@ export class ApiService {
     return this.http.delete<void>(`${API_URL}/tarefas/${id}`);
   }
 
-  // ===== Empresas (SuperAdmin) =====
   empresas() {
     return this.http.get<Empresa[]>(API_URL + '/empresas');
   }
   criarEmpresa(e: { nome: string; adminNome: string; adminEmail: string; adminSenha: string }) {
     return this.http.post<Empresa>(API_URL + '/empresas', e);
   }
-  // ===== Usuários (Admin) =====
   usuarios() {
     return this.http.get<Usuario[]>(`${API_URL}/usuarios`);
   }

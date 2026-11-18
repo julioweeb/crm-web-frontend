@@ -1,11 +1,6 @@
 @import '@fontsource-variable/bricolage-grotesque';
 @import '@fontsource-variable/instrument-sans';
 
-/* =====================================================================
-   Sistema de design do CRM
-   Ideia central: o funil de vendas dá a identidade. Cada estágio tem uma
-   cor própria (do azul-acinzentado ao verde), usada igual em todas as telas.
-   ===================================================================== */
 :root {
   --canvas: #eef1f2;
   --surface: #ffffff;
@@ -18,14 +13,14 @@
   --brand: #0f5c63;
   --brand-ink: #0a4349;
   --brand-soft: #dcedee;
-  --brand-hover: #0a4349;   /* fundo do botão ao passar o mouse */
-  --brand-deep: #0a4349;    /* painel escuro da tela de login */
-  --link: #0f5c63;          /* cor de links */
-  --surface-2: #f8fafa;     /* cabeçalho de tabela e linha em destaque */
-  --coluna: #e4e9eb;        /* fundo das colunas do funil */
+  --brand-hover: #0a4349;
+  --brand-deep: #0a4349;
+  --link: #0f5c63;
+  --surface-2: #f8fafa;
+  --coluna: #e4e9eb;
   --texto-ok: #1b5e3f;
   --texto-erro: #7e2a1b;
-  --logo-2: #2f8190;        /* barras do logo (precisam de contraste nos dois temas) */
+  --logo-2: #2f8190;
   --logo-3: #0f5c63;
 
   --ok: #2e8f62;
@@ -35,7 +30,6 @@
   --danger: #b8402b;
   --danger-soft: #f8e2dd;
 
-  /* Estágios do funil: progridem do frio (início) ao verde (fechado). */
   --st-prospeccao: #8fa6b8;
   --st-qualificacao: #5b96b0;
   --st-proposta: #2f8190;
@@ -51,10 +45,6 @@
   --lateral: 248px;
 }
 
-/* =====================================================================
-   Tema escuro: só redefine as variáveis; o resto do CSS não muda.
-   Ativado por data-tema="escuro" no <html> (veja core/tema.service.ts).
-   ===================================================================== */
 :root[data-tema='escuro'] {
   color-scheme: dark;
   --canvas: #0e161b;
@@ -109,7 +99,6 @@ a:hover { text-decoration-color: currentColor; }
 
 /* ===== Estrutura: menu lateral claro + conteúdo ===== */
 .conteudo { margin-left: var(--lateral); padding: 2rem 2.25rem 3rem; min-height: 100vh; }
-/* Em telas largas o conteúdo cresce até 1600px e fica centralizado na área ao lado do menu. */
 .pagina { max-width: 1600px; margin: 0 auto; }
 .topbar { display: none; }
 .fundo-menu { display: none; }
@@ -220,7 +209,6 @@ td[data-rotulo="Telefone"] { white-space: nowrap; }
   * { transition: none !important; animation: none !important; }
 }
 
-/* ===== Acabamento visual do CRM ===== */
 :root {
   color-scheme: light;
   --canvas: #f4f6f7;

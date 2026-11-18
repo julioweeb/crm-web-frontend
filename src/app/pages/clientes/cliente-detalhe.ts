@@ -24,7 +24,6 @@ type Aba = 'contatos' | 'historico' | 'anotacoes' | 'oportunidade';
 })
 export class ClienteDetalhe {
   private api = inject(ApiService);
-  // O Angular preenche "id" a partir do parâmetro da rota (/clientes/:id).
   id = input.required<string>();
 
   rotulo = ROTULO;

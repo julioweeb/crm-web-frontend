@@ -1,4 +1,3 @@
-/* Negociações em aberto: destaque claro e tipografia alinhada aos indicadores. */
 .total {
   margin-top: 0.65rem;
   color: var(--brand-ink);
@@ -42,7 +41,6 @@
   font-size: 0.8rem;
 }
 
-/* Indicadores mantidos em uma faixa única, com alturas e divisórias uniformes. */
 .faixa {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));

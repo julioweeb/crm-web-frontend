@@ -39,7 +39,6 @@ export class AuthService {
     try {
       sessionStorage.setItem(CHAVE_USUARIO, JSON.stringify(usuario));
     } catch {
-      /* ignora */
     }
     this.usuario.set(usuario);
   }
@@ -49,7 +48,6 @@ export class AuthService {
       sessionStorage.removeItem(CHAVE_TOKEN);
       sessionStorage.removeItem(CHAVE_USUARIO);
     } catch {
-      /* ignora */
     }
     this.usuario.set(null);
     this.router.navigate(['/login']);
@@ -61,7 +59,6 @@ export class AuthService {
       sessionStorage.setItem(CHAVE_TOKEN, r.token);
       sessionStorage.setItem(CHAVE_USUARIO, JSON.stringify(r.usuario));
     } catch {
-      /* ignora */
     }
     this.usuario.set(r.usuario);
   }
